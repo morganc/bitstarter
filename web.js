@@ -4,7 +4,12 @@ var fs = require('fs');
 var app = express.createServer(express.logger());
 
 app.get('/', function(request, response) {
-  response.send(fs.readFile('index.html').toString());
+  var myBuffer = fs.readFile('index.html');
+  var myMessage = 'There is no such file';
+  if (myBuffer) {
+    myMessage = myBuffer.toString();
+  }
+  response.send(myMessage);
 });
 
 var port = process.env.PORT || 5000;
