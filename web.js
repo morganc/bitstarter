@@ -4,12 +4,7 @@ var fs = require('fs');
 var app = express.createServer(express.logger());
 
 app.get('/', function(request, response) {
-  var myBuffer = fs.readFileSync('index.html');
-  var myMessage = 'There is no such file';
-  if (myBuffer) {
-    myMessage = myBuffer.toString();
-  }
-  response.send(myMessage);
+  response.send(fs.readFileSync('index.html').toString());
 });
 
 var port = process.env.PORT || 5000;
