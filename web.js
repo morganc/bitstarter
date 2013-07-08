@@ -4,7 +4,7 @@ var fs = require('fs');
 var app = express.createServer(express.logger());
 
 app.get('/', function(request, response) {
-  var myBuffer = fs.readFile('index.html');
+  var myBuffer = fs.readFileSync('index.html');
   var myMessage = 'There is no such file';
   if (myBuffer) {
     myMessage = myBuffer.toString();
