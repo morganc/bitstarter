@@ -31,8 +31,6 @@ var rest = require('restler');
 var HTMLFILE_DEFAULT = "index.html";
 var CHECKSFILE_DEFAULT = "checks.json";
 
-var myGlobal;
-
 var assertFileExists = function(infile) {
     var instr = infile.toString();
     if(!fs.existsSync(instr)) {
@@ -43,15 +41,15 @@ var assertFileExists = function(infile) {
 };
 
 var cheerioHtmlFile = function(htmlfile) {
-    console.log(fs.readFileSync(htmlfile).toString());
+//    console.log(fs.readFileSync(htmlfile).toString());
     return cheerio.load(fs.readFileSync(htmlfile));
 };
 
 var restlerHtmlFile = function(url) {
     return rest.get(url).on('complete', function(data) {
-        console.log(data);
-        myGlobal = data;
-        var  checkJson = checkHtmlFile(cheerio.load(myGlobal), program.checks);
+/* ugly, but... restler is asynchronous, how else to we do it? */
+//        console.log(data);
+        var checkJson = checkHtmlFile(cheerio.load(data), program.checks);
         var outJson = JSON.stringify(checkJson, null, 4);
         console.log(outJson);
         return data;
@@ -63,7 +61,7 @@ var loadChecks = function(checksfile) {
 };
 
 var checkHtmlFile = function(htmlfile, checksfile) {
-    console.log(htmlfile);
+//    console.log(htmlfile);
     $ = htmlfile;
     var checks = loadChecks(checksfile).sort();
     var out = {};
@@ -89,12 +87,12 @@ if(require.main == module) {
 
     var checkJson;
     if(program.url) {
-          console.log('program.url is defined');
+//          console.log('program.url is defined');
           restlerHtmlFile(program.url);
 //          checkJson = checkHtmlFile(cheerio.load(myGlobal), program.checks);
     }
     else {
-          console.log('program.url is NOT defined');
+//          console.log('program.url is NOT defined');
           checkJson = checkHtmlFile(cheerioHtmlFile(program.file), program.checks);
           var outJson = JSON.stringify(checkJson, null, 4);
           console.log(outJson);
